@@ -25,9 +25,6 @@ const User = db.define('user', {
   }
 });
 
-Page.sync()
-User.sync()
-
 module.exports = {
   Page, User
 }
