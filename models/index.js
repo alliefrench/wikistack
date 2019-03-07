@@ -10,10 +10,7 @@ function generateSlug (title) {
 const Page = db.define('page', {
   title: {
     type: Sequelize.STRING,
-<<<<<<< HEAD
-=======
-    allowNull: false
->>>>>>> 587406ac09394213a8948a4cb804def2f773c51f
+    allowNull: false,
   },
   slug: {
     type: Sequelize.STRING,
@@ -21,7 +18,7 @@ const Page = db.define('page', {
     isUrl: true
   },
   content: {
-    type: Sequelize.TEXT, 
+    type: Sequelize.TEXT,
     allowNull: false
   },
   status: {
@@ -34,7 +31,7 @@ const Page = db.define('page', {
   // }
 });
 
-Page.beforeCreate((pageInstance) => {
+Page.beforeValidate((pageInstance) => {
   pageInstance.slug = generateSlug(pageInstance.title)
 })
 
@@ -45,7 +42,7 @@ const User = db.define('user', {
   },
   email: {
     type: Sequelize.STRING,
-    allowNull: false, 
+    allowNull: false,
     isEmail: true,
   }
 });
