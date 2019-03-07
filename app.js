@@ -1,7 +1,8 @@
 const express = require('express');
 const morgan = require('morgan');
 const layout = require('./views/layout.js')
-const models = require('./models/index')
+//const models = require('./models/index')
+const {db} = require('./models')
 
 // db.authenticate().
 //   then(() => {
@@ -9,6 +10,8 @@ const models = require('./models/index')
 //   })
 
 const app = express();
+const wikiRouter = require('./routes/wiki');
+const userRouter = require('./routes/user');
 
 app.use(morgan('dev'));
 
@@ -16,16 +19,20 @@ app.use(express.static(__dirname + '/public'));
 
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (req, res,) => {
-  res.send(layout(''))
+app.get('/', (req, res,next) => {
+  res.redirect('/wiki')
 })
+
+app.use('/wiki', wikiRouter)
+app.use('/user', userRouter)
+
+
 
 const PORT = 3000
 
 const init = async () => {
   try {
-    await models.User.sync()
-    await models.Page.sync()
+    await db.sync({force: true})
 
     app.listen(PORT, () => {
       console.log(`App listening in port ${PORT}`)
