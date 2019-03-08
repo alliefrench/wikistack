@@ -1,49 +1,55 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-//const addPage = require('../views/addPage.js')
-//console.log(addPage)
-const { Page } = require("../models")
-// const { addPage } = require("../views");
-// console.log(addPage)
-const addPage = require("../views/addPage.js");
-//console.log(addPage)
+const { Page } = require('../models');
+const addPage = require('../views/addPage.js');
+const wikipage = require('../views/wikipage.js')
+// const { generateSlug } = require('../models')
+
+function generateSlug (title) {
+    // Removes all non-alphanumeric characters from title
+    // And make whitespace underscore
+    return title.replace(/\s+/g, '_').replace(/\W/g, '');
+}
 
 router.get('/', (req, res, next) => {
-    res.send('hello!')
-})
+  res.send('hello!');
+});
 
 router.post('/', async (req, res, next) => {
-    //console.log(req.body)
-    let contentObj = req.body
-    title = contentObj.title
-    content = contentObj.content
-    console.log(content)
-    // console.log(contentObj)
+  let contentObj = req.body;
+  title = contentObj.title;
+  content = contentObj.content;
 
-    const page = new Page({
-        title: title,
-        content: content
-      });
+  const page = Page.create({
+    title: title,
+    content: content,
+  });
 
+  const URI = generateSlug(title)
 
-      try {
-        await page.save();
-        console.log(page)
-        const newWiki = contentObj.slug
-        res.redirect(`/${newWiki}`);
-      } catch (error) { next(error) }
-})
-
+  try {
+    res.redirect(`/wiki/${URI}`);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router.get('/add', (req, res, next) => {
-    res.send(
-        addPage()
-    )
-})
+  res.send(addPage());
+});
 
+router.get('/:slug', async (req, res, next) => {
+  try {
+    const page = await Page.findOne({
+      where: {
+        slug: req.params.slug,
+      },
+    });
+    console.log(page)
+    res.send(wikipage(page, req.params.name));
+  } catch (error) {
+    next(error);
+  }
+});
 
-router.get('/:slug', (req, res, next) => {
-    res.send(`hit dynamic route at ${req.params.slug}`)
-})
-
-module.exports = router
+module.exports = router;

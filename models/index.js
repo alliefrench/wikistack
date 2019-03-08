@@ -25,10 +25,6 @@ const Page = db.define('page', {
     type: Sequelize.ENUM('open', 'closed'),
     defaultValue: 'closed'
   }
-  // author: {
-  //   type: Sequelize.STRING,
-  //   defaultValue: User.name
-  // }
 });
 
 Page.beforeValidate((pageInstance) => {
