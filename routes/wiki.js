@@ -23,6 +23,7 @@ router.post('/', async (req, res, next) => {
   const page = Page.create({
     title: title,
     content: content,
+
   });
 
   const URI = generateSlug(title)
@@ -46,7 +47,7 @@ router.get('/:slug', async (req, res, next) => {
       },
     });
     console.log(page)
-    res.send(wikipage(page, req.params.name));
+    res.send(wikipage(page.dataValues, req.params.name));
   } catch (error) {
     next(error);
   }
