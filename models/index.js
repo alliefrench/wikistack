@@ -43,7 +43,10 @@ const User = db.define('user', {
   }
 });
 
+Page.belongsTo(User, {as: 'author'})
+// User.hasMany(Page)
+
 module.exports = {
-  db, Page, User, generateSlug
+  db, Page, User
 }
 

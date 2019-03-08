@@ -20,15 +20,15 @@ app.get('/', (req, res, next) => {
 });
 
 app.use('/wiki', wikiRouter);
-app.use('/user', userRouter);
+app.use('/users', userRouter);
 
 const PORT = 3000;
 
 const init = async () => {
   try {
-    await db.sync({ force: true });
-    await Page.sync({ force: true });
-    await User.sync({ force: true });
+    await db.sync();
+    await Page.sync();
+    await User.sync();
 
     app.listen(PORT, () => {
       console.log(`App listening in port ${PORT}`);
